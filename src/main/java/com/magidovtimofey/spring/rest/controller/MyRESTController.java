@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import java.util.List;
 
 @RestController
@@ -46,5 +47,23 @@ public class MyRESTController {
         return employee;
     }
 
+    @PutMapping("/employees")
+    public Employee updateEmployees(@RequestBody Employee employee){
+
+        employeeService.saveEmployee(employee);
+        return employee;
+    }
+
+    @DeleteMapping("/employees/{id}")
+    public String deleteEmployee(@PathVariable int id){
+        Employee employee = employeeService.getEmployee(id);
+        if(employee==null){
+            throw new NoSuchEmployeeException("There is no employee with ID = "+
+                    id + " in Database");
+        }
+        employeeService.deleteEmployee(id);
+
+        return "Employee with id = "+ id + " was deleted";
+    }
 
 }
